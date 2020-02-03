@@ -7,11 +7,13 @@ const PORT = 4000
 const app = express()
 var arrProducts = [
     {
+        id: 4,
         nama: 'Popok Hokage',
         description: 'Siapkah anda menjadi hokage?',
         harga: 50000
     },
     {
+        id: 7,
         nama: 'Popok Naruto',
         description: 'Naruto menggunakannya dari kecil',
         harga: 100000
@@ -26,6 +28,23 @@ app.get('/', (req,res) => {
 })
 
 app.get('/products', (req,res) => { 
+    res.status(200).send(arrProducts)
+})
+
+app.get('/products/:id', (req,res) => { 
+    var hasil = arrProducts.filter((item) => {
+        return item.id === parseInt(req.params.id)
+    })
+    if(hasil.length === 0) {
+        return res.status(500).send({ status: 'Not Found', message: 'Product Not Found!'})
+    }
+
+    res.status(200).send(hasil[0])
+})
+
+//http://localhost:4000/products/54/test/keren/kurap/kacrut/bebas
+app.get('/products/:id/test/:contoh/:keren/kacrut/:kucrat', (req,res) => { 
+    console.log(req.params)
     res.status(200).send(arrProducts)
 })
 

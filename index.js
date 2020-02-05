@@ -1,6 +1,16 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const mysql = require('mysql');
+
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'saitama',
+  password : 'abc123',
+  database : 'popokhokage',
+  port     : 3306
+});
+
 
 const PORT = 4000
 
@@ -25,6 +35,72 @@ app.use(bodyParser.json())
 
 app.get('/', (req,res) => {
     res.status(202).send('<h1>Selamat Datang di API Latihan!</h1>')
+})
+
+app.get('/categories/:nama', (req,res) => {
+    console.log(req.params.nama)
+
+    const query = `SELECT * 
+        FROM categories 
+        WHERE category = ${connection.escape(req.params.nama)};`
+    
+    console.log(query)
+    connection.query(query, (err, results) => {
+        console.log('Error : ',err)
+        if (err) {
+            return res.status(500).send(err)
+        }
+        
+        console.log('Results : ', results)
+
+        res.status(200).send(results)
+      });
+})
+
+app.post('/categories', (req,res) => {
+    console.log(req.query)
+    console.log(req.body)
+
+    const query = `INSERT INTO categories SET ? ;`
+    console.log(query)
+    connection.query(query, req.query, (err,results) => {
+        if(err) {
+            return res.status(500).send(err)
+        }
+
+        console.log(results)
+        res.status(200).send(results)
+    })
+})
+
+app.put('/categories/:id', (req,res) => {
+    console.log(req.params)
+    console.log(req.body)
+
+    const query = `UPDATE categories SET ? WHERE id = ${connection.escape(req.params.id)}`
+    console.log(query)
+    connection.query(query, req.body, (err,results) => {
+        if(err) {
+            return res.status(500).send(err)
+        }
+
+        console.log(results)
+        res.status(200).send(results)
+    })
+})
+
+app.delete('/categories/:id', (req,res) => {
+    console.log(req.params)
+    const query = `DELETE FROM categories WHERE id = ${connection.escape(req.params.id)}`;
+    
+    connection.query(query,(err,results) => {
+        if(err) {
+            return res.status(500).send(err)
+        }
+
+        console.log(results)
+        res.status(200).send(results)
+    })
 })
 
 app.get('/products', (req,res) => { 

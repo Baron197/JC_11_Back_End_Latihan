@@ -37,6 +37,29 @@ app.get('/', (req,res) => {
     res.status(202).send('<h1>Selamat Datang di API Latihan!</h1>')
 })
 
+app.get('/testtrycatch', (req,res) => {
+    try {
+        console.loog('test')
+        res.status(200).send('<h2>Mulus</h2>')
+    } catch(err) {
+        res.status(500).send({ message: 'Ada Terjadi Error Mas'})
+    }
+})
+
+app.get('/categories', (req,res) => {
+    console.log(req.query)
+    const query = `SELECT * 
+        FROM categories;`
+    
+    connection.query(query, (err, results) => {
+        if (err) {
+            return res.status(500).send(err)
+        }
+
+        res.status(200).send(results)
+      });
+})
+
 app.get('/categories/:nama', (req,res) => {
     console.log(req.params.nama)
 
@@ -58,17 +81,17 @@ app.get('/categories/:nama', (req,res) => {
 })
 
 app.post('/categories', (req,res) => {
-    console.log(req.query)
-    console.log(req.body)
+    console.log('Query : ',req.query)
+    console.log('Body : ', req.body)
 
     const query = `INSERT INTO categories SET ? ;`
-    console.log(query)
-    connection.query(query, req.query, (err,results) => {
+
+    connection.query(query, req.body, (err,results) => {
         if(err) {
             return res.status(500).send(err)
         }
 
-        console.log(results)
+        // console.log(results)
         res.status(200).send(results)
     })
 })

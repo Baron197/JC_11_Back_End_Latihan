@@ -3,7 +3,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const mysql = require('mysql');
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'saitama',
   password : 'abc123',
@@ -49,7 +49,7 @@ app.get('/testtrycatch', (req,res) => {
 app.get('/categories', (req,res) => {
     console.log(req.query)
     const query = `SELECT * 
-        FROM categories;`
+        FROM category_complete;`
     
     connection.query(query, (err, results) => {
         if (err) {

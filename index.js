@@ -60,6 +60,19 @@ app.get('/categories', (req,res) => {
       });
 })
 
+app.get('/testnext', (req,res,next) => {
+    console.log('Masuk Function 1')
+    next()
+    console.log('Masih Function 1')
+}, (req,res,next) => {
+    console.log('Masuk Function 2')
+    next()
+    console.log('Masih di Function 2')
+}, (req,res) => {
+    console.log('Masuk Function 3')
+    res.status(200).send('<h1>Selesai</h1>')
+})
+
 app.get('/categories/:nama', (req,res) => {
     console.log(req.params.nama)
 
